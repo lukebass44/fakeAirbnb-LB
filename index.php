@@ -1,3 +1,10 @@
+<?php
+    include("src/functions.php");
+    $db = dbConnect();
+    $neighborhoods = getNeighborhoods($db);
+    $roomTypes = getRoomTypes($db);
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -29,7 +36,7 @@
             <div class="container">
             <a href="index.php" class="navbar-brand d-flex align-items-center">
                 <i class="bi bi-house-heart-fill my-2"></i>    
-                <strong> Fake Airbnb</strong>
+                <strong> Fake Airbnb </strong>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -42,19 +49,68 @@
 
     <div class="album py-5 bg-light">
         <div class="container">
-        <h1>a title:</h1>
+        <h1>Search for rentals in the Portland area:</h1>
+
+        <form action="results.php" method="GET">
 
             <div class="row g-3 align-items-center">
                 <div class="col-auto">
-                    <label for="neighborhood" class="col-form-label">sample form element label</label>
+                    <label for="neighborhood" class="col-form-label">Nieghborhood</label>
                 </div>
 
                 <div class="col-auto">
-                        form element here
+                    <select class="form-select" id="neighborhood" name="neighborhood">
+                        <option value='any'>Any</option>"
+                        <?php 
+                            foreach ($neighborhoods as $neighborhood) {
+                                $id = $neighborhood['id'];
+                                $name = $neighborhood['neighborhood'];
+                                echo "<option value='$id'>$name</option>";
+                            }
+                        ?>
+                    </select>
                 </div>
-
             </div><!-- row -->
 
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <label for="roomType" class="col-form-label">Room-Type</label>
+                </div>
+
+                <div class="col-auto">
+                    <select class="form-select" id="roomType" name="roomType">
+                    <option value='any'>Any</option>"
+                        <?php 
+                            foreach ($roomTypes as $roomType) {
+                                $id = $roomType["id"];
+                                $type = $roomType['type'];
+                                echo "<option value='$id'>$type</option>";
+                            }
+                        ?>
+                    </select>
+                </div>
+            </div><!-- row -->
+
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <label for="guests" class="col-form-label">Number of Guests</label>
+                </div>
+
+                <div class="col-auto">
+                    <select class="form-select" id="guests" name="guests">
+                        <?php
+                            foreach (range(1, 10) as $i) {
+                                echo "<option value='$i'>$i</option>";
+                            }
+                        ?>
+
+                    </select>
+                </div>
+            </div><!-- row -->
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+
+        </form>
 
         </div><!-- .container-->
     </div><!-- album-->
